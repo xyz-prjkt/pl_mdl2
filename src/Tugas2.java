@@ -31,9 +31,9 @@ public class Tugas2 implements library {
                     System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
                 }
             }
-        } else if (method.equals("dup")){
-            for (int i = 0; i < book.length; i++) {
-                if (from.compareTo(parseBook(book[i], "from")) == 0){
+        } else if (method.equals("validate")){
+            for (int i = 0; i < place.length; i++) {
+                if (from.equals(place[i])){
                     return true;
                 }
             }
@@ -103,34 +103,90 @@ public class Tugas2 implements library {
         }
         mainMenu();
     }
-    
-    private void mainMenu(){
-        System.out.print("\n===============================");
-        System.out.println("\nWelcome to, UMM Library");
-        System.out.println("1. Book Register\n2. List Book\n3. Find Book");
-        System.out.print("Pilih menu: ");
-        int go = input.nextInt();
-        switch (go){
-            case 1 : registerBook(); break;
-            case 2 : list(); break;
-            case 3 : findBook(); break;
+
+    public void deleteBook(){
+        System.out.print("Masukkan Nama buku :");
+        input.nextLine();
+        String rmBook = input.nextLine();
+        String tempBooks[] = new String[book.length - 1];
+        try {
+            if(cekName("dup", rmBook)){
+                for(int i = 0, k = 0; i < book.length; i++){
+                    if (!rmBook.equals(parseBook(book[i], "name"))){
+                        tempBooks[k++] = book[i];
+                    }
+                }
+                inIndex--;
+                book = Arrays.copyOf(tempBooks, inIndex);
+            } else {
+                throw new Exception("Buku tidak terdaftar di sistem");
+            }
+        } catch (Exception e){
+            System.out.println(e);
+            deleteBook();
         }
+        mainMenu();
     }
     
-    public void registerBook(){
-        System.out.println("Register ");
+    public void inputNama(){
         System.out.print("Nama : ");
-        input.nextLine(); inName = input.nextLine();
+        inName = input.nextLine();
+        try {
+            if (cekName("dup", inName)){
+                throw new Exception("Nama telah ada di list book");
+            }
+        } catch (Exception e){
+            System.out.println(e);
+            inputNama();
+        }
+    }
+
+    public void inputFrom(){
         System.out.print("From : ");
         inFrom = input.nextLine();
+        try {
+            if (!cekFrom("validate", inFrom)) {
+                throw new Exception("Region tidak terdaftar pada sistem");
+            }
+        } catch (Exception e){
+            System.out.println(e);
+            inputFrom();
+        }
+    }
+
+    public void inputDate(){
         System.out.print("Date : ");
         inDate = input.nextInt();
+    }
+
+    public void registerBook(){
+        System.out.println("Register ");
+        input.nextLine();
+
+        inputNama();
+        inputFrom();
+        inputDate();
+
         String bookName = (inName + "," + inFrom + "." + inDate);
         book = Arrays.copyOf(book, inIndex + 1);
         book[inIndex] = bookName;
         inIndex++;
         System.out.println("Buku berhasil ditambahkan");
         mainMenu();
+    }
+
+    private void mainMenu(){
+        System.out.print("\n===============================");
+        System.out.println("\nWelcome to, UMM Library");
+        System.out.println("1. Book Register\n2. List Book\n3. Find Book\n4. Delete Book");
+        System.out.print("Pilih menu: ");
+        int go = input.nextInt();
+        switch (go){
+            case 1 : registerBook(); break;
+            case 2 : list(); break;
+            case 3 : findBook(); break;
+            case 4 : deleteBook(); break;
+        }
     }
     public static void main(String[] args) {
         Tugas2 main = new Tugas2();
