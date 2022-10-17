@@ -15,17 +15,17 @@ public class Tugas2 implements library {
     String[] place = {"Malang", "Bandung", "Surabaya"};
     public void cekDate(int date){
         if(date == 1){
-            for (int i = 0; i < book.length; i++) {
-                int parsedYear = Integer.parseInt(parseBook(book[i], "date"));
+            for (String s : book) {
+                int parsedYear = Integer.parseInt(parseBook(s, "date"));
                 if (parsedYear < 2018) {
-                    System.out.printf("%s, %s. %s\n", parseBook(book[i], "name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+                    System.out.printf("%s, %s. %s\n", parseBook(s, "name"), parseBook(s, "from"), parseBook(s, "date"));
                 }
             }
         } else if (date == 0){
-            for (int i = 0; i < book.length; i++) {
-                int parsedYear = Integer.parseInt(parseBook(book[i], "date"));
+            for (String s : book) {
+                int parsedYear = Integer.parseInt(parseBook(s, "date"));
                 if (parsedYear >= 2018) {
-                    System.out.printf("%s, %s. %s\n", parseBook(book[i], "name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+                    System.out.printf("%s, %s. %s\n", parseBook(s, "name"), parseBook(s, "from"), parseBook(s, "date"));
                 }
             }
         }
@@ -33,14 +33,14 @@ public class Tugas2 implements library {
 
     public boolean cekFrom(String method, String from){
         if(method.equals("find")){
-            for (int i = 0; i < book.length; i++) {
-                if (from.compareTo(parseBook(book[i], "from")) == 0){
-                    System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+            for (String s : book) {
+                if (from.compareTo(parseBook(s, "from")) == 0) {
+                    System.out.printf("%s, %s. %s\n", parseBook(s, "name"), parseBook(s, "from"), parseBook(s, "date"));
                 }
             }
         } else if (method.equals("validate")){
-            for (int i = 0; i < place.length; i++) {
-                if (from.equals(place[i])){
+            for (String s : place) {
+                if (from.equals(s)) {
                     return true;
                 }
             }
@@ -50,14 +50,14 @@ public class Tugas2 implements library {
 
     public boolean cekName(String method, String name){
         if (method.equals("find")){
-            for (int i = 0; i < book.length; i++) {
-                if (parseBook(book[i], "name").equals(name)){
-                    System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+            for (String s : book) {
+                if (name.compareTo(parseBook(s, "name")) == 0) {
+                    System.out.printf("%s, %s. %s\n", parseBook(s, "name"), parseBook(s, "from"), parseBook(s, "date"));
                 }
             }
         } else if (method.equals("dup")){
-            for (int i = 0; i < book.length; i++) {
-                if (name.compareTo(parseBook(book[i], "name")) == 0){
+            for (String s : book) {
+                if (name.compareTo(parseBook(s, "name")) == 0) {
                     return true;
                 }
             }
@@ -78,15 +78,12 @@ public class Tugas2 implements library {
         String parsedName = parsedBook[0];
         String parsedFrom = parsedBook[1];
         String parsedDate = parsedBook[2];
-        if (tag.equals("name")){
-            return parsedName;
-        } else if (tag.equals("from")) {
-            return parsedFrom;
-        } else if (tag.equals("date")) {
-            return parsedDate;
-        } else {
-            return "null";
-        }
+        return switch (tag) {
+            case "name" -> parsedName;
+            case "from" -> parsedFrom;
+            case "date" -> parsedDate;
+            default -> "null";
+        };
     }
 
     void findBook(){
@@ -94,24 +91,26 @@ public class Tugas2 implements library {
         System.out.println("1. Find books by Region\n2. Find books by Date");
         System.out.print("Pilih menu : ");
         int findMethod = input.nextInt();
-        switch (findMethod){
-            case 1:
+        switch (findMethod) {
+            case 1 -> {
                 System.out.println("Finding Book Using Region Method");
                 System.out.print("Input Region : ");
-                input.nextLine(); String findRegion = input.nextLine();
+                input.nextLine();
+                String findRegion = input.nextLine();
                 cekFrom("find", findRegion);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 System.out.println("Finding Book Using Date Method");
                 System.out.print("1. Newer ( 2018 -> Newest )\n2. Older ( 2018 -> Oldest )");
                 System.out.print("\nMasukkan Menu: ");
-                input.nextLine(); int findDate = input.nextInt();
-                if (findDate == 1){
+                input.nextLine();
+                int findDate = input.nextInt();
+                if (findDate == 1) {
                     cekDate(0);
                 } else if (findDate == 2) {
                     cekDate(1);
                 }
-                break;
+            }
         }
         mainMenu();
     }
@@ -120,7 +119,7 @@ public class Tugas2 implements library {
         System.out.print("Masukkan Nama buku :");
         input.nextLine();
         String rmBook = input.nextLine();
-        String tempBooks[] = new String[book.length - 1];
+        String[] tempBooks = new String[book.length - 1];
         try {
             if(cekName("dup", rmBook)){
                 for(int i = 0, k = 0; i < book.length; i++){
@@ -188,16 +187,19 @@ public class Tugas2 implements library {
     }
 
     private void mainMenu(){
-        System.out.print("\n===============================");
+        System.out.print("\n=============================================");
         System.out.println("\nWelcome to, UMM Library");
-        System.out.println("1. Book Register\n2. List Book\n3. Find Book\n4. Delete Book");
+        System.out.println("CRUD with Dynamic Array Implementations");
+        System.out.print("=============================================\n");
+        System.out.println("1. Book Register\n2. List Book\n3. Find Book\n4. Delete Book\n0. Exit");
         System.out.print("Pilih menu: ");
         int go = input.nextInt();
-        switch (go){
-            case 1 : registerBook(); break;
-            case 2 : list(); break;
-            case 3 : findBook(); break;
-            case 4 : deleteBook(); break;
+        switch (go) {
+            case 1 -> registerBook();
+            case 2 -> list();
+            case 3 -> findBook();
+            case 4 -> deleteBook();
+            case 0 -> System.exit(130);
         }
     }
     public static void main(String[] args) {
