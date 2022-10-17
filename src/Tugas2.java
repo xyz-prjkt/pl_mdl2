@@ -14,12 +14,19 @@ public class Tugas2 implements library {
     public String[] book = new String[1];
     String[] place = {"Malang", "Bandung", "Surabaya"};
     public void cekDate(int date){
-        for (int i = 0; i < book.length; i++) {
-            int parsedYear = Integer.parseInt(parseBook(book[i], "date"));
-            if (parsedYear < 2018 && date < 2018) {
-                System.out.printf("%s, %s. %s\n", parseBook(book[i], "name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
-            } else {
-                System.out.printf("%s, %s. %s\n", parseBook(book[i], "name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+        if(date == 1){
+            for (int i = 0; i < book.length; i++) {
+                int parsedYear = Integer.parseInt(parseBook(book[i], "date"));
+                if (parsedYear < 2018) {
+                    System.out.printf("%s, %s. %s\n", parseBook(book[i], "name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+                }
+            }
+        } else if (date == 0){
+            for (int i = 0; i < book.length; i++) {
+                int parsedYear = Integer.parseInt(parseBook(book[i], "date"));
+                if (parsedYear >= 2018) {
+                    System.out.printf("%s, %s. %s\n", parseBook(book[i], "name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+                }
             }
         }
     }
@@ -96,9 +103,14 @@ public class Tugas2 implements library {
                 break;
             case 2:
                 System.out.println("Finding Book Using Date Method");
-                System.out.print("Input Region : ");
+                System.out.print("1. Newer ( 2018 -> Newest )\n2. Older ( 2018 -> Oldest )");
+                System.out.print("\nMasukkan Menu: ");
                 input.nextLine(); int findDate = input.nextInt();
-                cekDate(findDate);
+                if (findDate == 1){
+                    cekDate(0);
+                } else if (findDate == 2) {
+                    cekDate(1);
+                }
                 break;
         }
         mainMenu();
