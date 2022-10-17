@@ -82,8 +82,10 @@ public class Tugas1 extends Tugas1Model {
         System.out.print("Masukkan No Telp : ");
         String inputTelp = inputData.nextLine();
         try {
-            if (!inputTelp.substring(0,3).equals("+62")) {
+            if (!inputTelp.substring(0, 3).equals("+62")) {
                 throw new Exception("Nomor telp harus berasal dari Indonesia (+62)");
+            } else if (containsLetter(inputTelp)){
+                throw new Exception("Nomor telp tidak boleh mengandung karakter");
             } else {
                 setTelp(inputTelp);
             }
@@ -102,6 +104,16 @@ public class Tugas1 extends Tugas1Model {
         char[] chars = text.toCharArray();
         for (char c : chars){
             if(Character.isDigit(c)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    boolean containsLetter(String text){
+        char[] chars = text.toCharArray();
+        for (char c : chars){
+            if(Character.isLetter(c)){
                 return true;
             }
         }
