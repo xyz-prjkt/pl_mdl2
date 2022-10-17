@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 interface library {
     void cekDate(int date);
-    void cekFrom(String from);
-    void cekName(String name);
+    boolean cekFrom(String method, String from);
+    boolean cekName(String method, String name);
     void list();
 }
 public class Tugas2 implements library {
@@ -24,20 +24,38 @@ public class Tugas2 implements library {
         }
     }
 
-    public void cekFrom(String from){
-        for (int i = 0; i < book.length; i++) {
-            if (parseBook(book[i], "from").equals(from)){
-                System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+    public boolean cekFrom(String method, String from){
+        if(method.equals("find")){
+            for (int i = 0; i < book.length; i++) {
+                if (from.compareTo(parseBook(book[i], "from")) == 0){
+                    System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+                }
+            }
+        } else if (method.equals("dup")){
+            for (int i = 0; i < book.length; i++) {
+                if (from.compareTo(parseBook(book[i], "from")) == 0){
+                    return true;
+                }
             }
         }
+        return false;
     }
 
-    public void cekName(String name){
-        for (int i = 0; i < book.length; i++) {
-            if (parseBook(book[i], "name").equals(name)){
-                System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+    public boolean cekName(String method, String name){
+        if (method.equals("find")){
+            for (int i = 0; i < book.length; i++) {
+                if (parseBook(book[i], "name").equals(name)){
+                    System.out.printf("%s, %s. %s\n", parseBook(book[i],"name"), parseBook(book[i], "from"), parseBook(book[i], "date"));
+                }
+            }
+        } else if (method.equals("dup")){
+            for (int i = 0; i < book.length; i++) {
+                if (name.compareTo(parseBook(book[i], "name")) == 0){
+                    return true;
+                }
             }
         }
+        return false;
     }
 
     public void list(){
@@ -74,7 +92,7 @@ public class Tugas2 implements library {
                 System.out.println("Finding Book Using Region Method");
                 System.out.print("Input Region : ");
                 input.nextLine(); String findRegion = input.nextLine();
-                cekFrom(findRegion);
+                cekFrom("find", findRegion);
                 break;
             case 2:
                 System.out.println("Finding Book Using Date Method");
