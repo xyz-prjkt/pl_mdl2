@@ -1,12 +1,6 @@
 import java.util.Scanner;
-public class Tugas1 {
-
+public class Tugas1 extends Tugas1Model {
     Scanner inputData = new Scanner(System.in);
-    private String NIM;
-    private String Email;
-    private String Nama;
-    private String Telp;
-    private String Alamat;
 
     public static void main(String[] args) {
         Tugas1 main = new Tugas1();
@@ -52,27 +46,13 @@ public class Tugas1 {
         System.out.print("Masukkan Email UMM : ");
         String inputEmail = inputData.nextLine();
 
-        /*  Blueprint Case
-            xyzuan@webmail.umm.ac.id // Users Input
-            xyzuan = 6 Char // frontEmail
-            @webmail.umm.ac.id = 18 Char // endEmail
-            totalChar = 24
-            frontIndex = 24 - 18 = 6, so begins with 1 -> 6
-            startIndex = 1 -> frontIndex
-            endIndex = frontIndex -> totalChar
-        */
-
-        String endEmail = "@webmail.umm.ac.id";
-        int totalEmailChar = inputEmail.length();
-        int endEmailChar = endEmail.length();
-        int frontIndex = totalEmailChar - endEmailChar;
-        String parsedStart = inputEmail.substring(0, frontIndex);
-        String parsedEnd = inputEmail.substring(frontIndex, totalEmailChar);
+        String allowedDomain = "@webmail.umm.ac.id";
+        String parsedStart = inputEmail.substring(0, inputEmail.length() - allowedDomain.length());
 
         try {
             if (parsedStart.isEmpty()){
                 throw new Exception("Email tidak sah");
-            } else if (!parsedEnd.equals(endEmail)) {
+            } else if (!inputEmail.endsWith(allowedDomain)) {
                 throw new Exception("Email wajib menggunakan domain @webmail.umm.ac.id");
             } else {
                 setEmail(inputEmail);
@@ -85,15 +65,25 @@ public class Tugas1 {
 
     void inputNama(){
         System.out.print("Masukkan Nama : ");
-        setNama(inputData.nextLine());
+        String inputNama = inputData.nextLine();
+        try {
+            if (containsNum(inputNama)){
+                throw new Exception("Nama tidak diperbolehkan terdapat angka");
+            } else {
+                setNama(inputNama);
+            }
+        } catch (Exception e){
+            System.out.println(e);
+            inputNama();
+        }
     }
 
     void inputTelp(){
         System.out.print("Masukkan No Telp : ");
         String inputTelp = inputData.nextLine();
         try {
-            if (!inputTelp.contains("+62")) {
-                throw new Exception("Nomor telp harus diawali dengan +62");
+            if (!inputTelp.substring(0,3).equals("+62")) {
+                throw new Exception("Nomor telp harus berasal dari Indonesia (+62)");
             } else {
                 setTelp(inputTelp);
             }
@@ -108,43 +98,13 @@ public class Tugas1 {
         setAlamat(inputData.nextLine());
     }
 
-    public String getNIM() {
-        return NIM;
-    }
-
-    public void setNIM(String NIM) {
-        this.NIM = NIM;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public String getNama() {
-        return Nama;
-    }
-
-    public void setNama(String nama) {
-        Nama = nama;
-    }
-
-    public String getTelp() {
-        return Telp;
-    }
-
-    public void setTelp(String telp) {
-        Telp = telp;
-    }
-
-    public String getAlamat() {
-        return Alamat;
-    }
-
-    public void setAlamat(String alamat) {
-        Alamat = alamat;
+    boolean containsNum(String text){
+        char[] chars = text.toCharArray();
+        for (char c : chars){
+            if(Character.isDigit(c)){
+                return true;
+            }
+        }
+        return false;
     }
 }
